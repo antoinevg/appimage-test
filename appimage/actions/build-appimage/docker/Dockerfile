@@ -194,8 +194,10 @@ ENV PATH="$NVM_DIR:$NODE_PATH:$PATH"
 ENV PATH="$HOME/.cargo/bin:$PATH"
 
 # gtk-4.0
-ENV CPPFLAGS="-I/opt/gtk-$GTK_VERSION/include"
-ENV LDFLAGS="-L/opt/gtk-$GTK_VERSION/lib/x86_64-linux-gnu"
-ENV PKG_CONFIG_PATH="/opt/gtk-$GTK_VERSION/lib/x86_64-linux-gnu/pkgconfig"
-ENV LD_LIBRARY_PATH="/opt/gtk-$GTK_VERSION/lib/x86_64-linux-gnu"
-ENV PATH="/opt/gtk-$GTK_VERSION/bin:$PATH"
+ENV GTK4="/opt/gtk-$GTK_VERSION"
+
+ENV CPPFLAGS="-I$GTK4/include"
+ENV LDFLAGS="-L$GTK4/lib/x86_64-linux-gnu"
+ENV PKG_CONFIG_PATH="$GTK4/lib/x86_64-linux-gnu/pkgconfig"
+ENV LD_LIBRARY_PATH="$GTK4/lib/x86_64-linux-gnu"
+ENV PATH="$GTK4/bin:$PATH"

@@ -1,15 +1,26 @@
-name: "Print a name simple action"
-description: "Prints a name"
+name: "A simple test action"
+description: "Tests the thing"
 inputs:
-    NAME:
-        description: "The name to print"
-        required: false
-        default: "N/A"
+  executable:
+    description: "Executable file"
+    required: true
+  icon-file:
+    description: "Icon file to use for Executable"
+    required: true
+  desktop-file:
+    description: "Desktop file to use for Executable"
+    required: true
+
 runs:
   using: "composite"
+
   steps:
     - name: Print the name
       run: |
-        echo "Hello ${{ inputs.NAME }}!"
+        echo "Hello ${{ inputs.executable }}!"
+      shell: bash
 
+    - name: Print docker env var
+      run: |
+        echo "Hello $GTK4!"
       shell: bash
