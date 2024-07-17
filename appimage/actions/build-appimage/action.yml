@@ -1,0 +1,39 @@
+name: "Build Packetry AppImage"
+description: "Builds a Linux AppImage for Packetry on Debian 10 (Buster)"
+inputs:
+  executable:
+    description: "Executable file"
+    required: true
+  icon-file:
+    description: "Icon file to use for Executable"
+    required: true
+  desktop-file:
+    description: "Desktop file to use for Executable"
+    required: true
+
+runs:
+  using: docker
+  image: ../docker/Dockerfile
+
+  steps:
+    - name: Do the first thing
+      run: |
+        ls -al /opt
+        echo "Executable is ${{ inputs.executable }}!"
+
+      shell: bash
+
+
+# name: "Build AppImage"
+# description: "Builds a Linux AppImage on Debian 10 (Buster)"
+# inputs:
+#   executable:
+#     description: "Executable file"
+#     required: true
+#   outputs:
+#     time:
+#       description: "TODO this"
+#   runs:
+#     using: "docker"
+#     #image: "Dockerfile"
+#     image: "gtk:4.14.4"

@@ -1,0 +1,138 @@
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+name: CI
+
+jobs:
+
+  build_and_test_appimage:
+    name: Build and test (AppImage)
+    runs-on: ubuntu-latest
+
+    container:
+      image: gtk:4.14.4
+      volumes:
+        - /tmp/act:/tmp/act
+    env:
+      GTK_LIB: /opt/gtk-4.14.4/lib/x86_64-linux-gnu
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install toolchain
+        run: |
+          echo $PATH
+          rustup toolchain install stable
+          rustup default stable
+
+      - name: Build packetry binary
+        run: cargo build --release
+
+      - name: Test under XVFB (Linux)
+        run: xvfb-run cargo test
+        if: runner.os == 'Linux'
+
+      - name: Build packetry-x86_64.AppDir (Linux)
+        run: |
+          # build appimage
+          DEPLOY_GTK_VERSION=4 linuxdeploy-x86_64.AppImage \
+            --appimage-extract-and-run \
+            --appdir packetry.AppDir \
+            --executable=./target/release/packetry \
+            --icon-file ./appimage/dist/icon.png \
+            --plugin gtk \
+            --desktop-file ./appimage/dist/packetry.desktop
+
+      - name: Shrink packetry-x86_64.AppDir (Linux)
+        run: |
+          # cd to AppDir lib directory
+          cd ${{ github.workspace }}/packetry.AppDir/usr/lib
+
+          # fix symlinks
+          rm libgdk_pixbuf-2.0.so
+          rm libgdk_pixbuf-2.0.so.0
+          ln -s libgdk_pixbuf-2.0.so.0.4200.11 libgdk_pixbuf-2.0.so
+          ln -s libgdk_pixbuf-2.0.so.0.4200.11 libgdk_pixbuf-2.0.so.0
+          rm libgio-2.0.so
+          rm libgio-2.0.so.0
+          ln -s libgio-2.0.so.0.7600.0 libgio-2.0.so
+          ln -s libgio-2.0.so.0.7600.0 libgio-2.0.so.0
+          rm libgobject-2.0.so
+          rm libgobject-2.0.so.0
+          ln -s libgobject-2.0.so.0.7600.0 libgobject-2.0.so
+          ln -s libgobject-2.0.so.0.7600.0 libgobject-2.0.so.0
+          rm libpango-1.0.so
+          rm libpango-1.0.so.0
+          ln -s libpango-1.0.so.0.5400.0 libpango-1.0.so
+          ln -s libpango-1.0.so.0.5400.0 libpango-1.0.so.0
+          rm libpangocairo-1.0.so
+          rm libpangocairo-1.0.so.0
+          ln -s libpangocairo-1.0.so.0.5400.0 libpangocairo-1.0.so
+          ln -s libpangocairo-1.0.so.0.5400.0 libpangocairo-1.0.so.0
+          rm libpangoft2-1.0.so
+          rm libpangoft2-1.0.so.0
+          ln -s libpangoft2-1.0.so.0.5400.0 libpangoft2-1.0.so
+          ln -s libpangoft2-1.0.so.0.5400.0 libpangoft2-1.0.so.0
+
+          # remove some libraries we don't need
+          rm libX*
+          rm libblkid*
+          rm libbsd*
+          rm libcroco*
+          rm libicu*
+          rm libpixbufloader*
+          rm libpixman*
+          rm librsvg*
+          rm libxcb-render*
+          rm libxml*
+          rm libzstd*
+
+          # add some libraries we do need
+          cp $GTK_LIB/libharfbuzz-gobject.so.0.40000.0 .
+          ln -s libharfbuzz-gobject.so.0.40000.0 libharfbuzz-gobject.so.0
+          ln -s libharfbuzz-gobject.so.0.40000.0 libharfbuzz-gobject.so
+          cp $GTK_LIB/libharfbuzz-icu.so.0.40000.0 .
+          ln -s libharfbuzz-icu.so.0.40000.0 libharfbuzz-icu.so.0
+          ln -s libharfbuzz-icu.so.0.40000.0 libharfbuzz-icu.so
+          cp $GTK_LIB/libharfbuzz.so.0.40000.0 .
+          ln -s libharfbuzz.so.0.40000.0 libharfbuzz.so.0
+          ln -s libharfbuzz.so.0.40000.0 libharfbuzz.so
+          cp $GTK_LIB/libharfbuzz-subset.so.0.40000.0 .
+          ln -s libharfbuzz-subset.so.0.40000.0 libharfbuzz-subset.so.0
+          ln -s libharfbuzz-subset.so.0.40000.0 libharfbuzz-subset.so
+
+          # strip all libraries
+          strip lib*.so.*
+
+          # return to workspace directory
+          cd ${{ github.workspace }}
+
+      - name: Build packetry-x86_64.AppImage (Linux)
+        run: |
+          appimagetool-x86_64.AppImage \
+            --appimage-extract-and-run \
+            packetry.AppDir/
+
+      - name: Test AppImage under XVFB (Linux)
+        run: |
+          xvfb-run ./packetry-x86_64.AppImage --version
+        if: runner.os == 'Linux'
+
+      - name: Upload AppImage (Linux)
+        run: |
+          rm -rf /tmp/act/*
+          cp -r packetry-x86_64.AppImage /tmp/act/
+          cp -r packetry.AppDir/ /tmp/act/
+
+      # - name: Upload AppImage (Linux)
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Binary for Linux
+      #     path: |
+      #       packetry-x86_64.AppImage
+      #     if-no-files-found: error
