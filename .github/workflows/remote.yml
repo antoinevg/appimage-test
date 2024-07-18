@@ -59,6 +59,9 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
 
+    env:
+      TAG: latest
+
     container:
       image: ghcr.io/${{ github.repository }}-testimage:${{ env.TAG }}
       options: --user root # see: https://github.com/actions/checkout/issues/1014
