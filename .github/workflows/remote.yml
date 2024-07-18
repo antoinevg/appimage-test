@@ -41,7 +41,7 @@ jobs:
           #labels: ${{ steps.meta.outputs.labels }}
 
   test-remote:
-    needs: build-docker-image
+    needs: build-and-push-docker-image
 
     name: Build and test (AppImage)
     runs-on: ubuntu-latest
