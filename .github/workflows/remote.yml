@@ -37,8 +37,9 @@ jobs:
         with:
           context: appimage/actions/test-action/docker/
           push: true
-          tags: "boink" # ${{ steps.meta.outputs.tags }}
+          #tags: ${{ steps.meta.outputs.tags }}
           #labels: ${{ steps.meta.outputs.labels }}
+          tags: ghcr.io/${{ github.repository_owner }}/gtk:remote
 
   test-remote:
     needs: build-and-push-docker-image
@@ -47,7 +48,10 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: gtk:test
+      image: ghcr.io/${{ github.repository_owner }}/gtk:remote
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
       volumes:
         - /tmp/act:/tmp/act
 
