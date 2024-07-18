@@ -59,6 +59,10 @@ jobs:
         - /tmp/act:/tmp/act
 
     steps:
+      - name: cleanup old checkout
+        # see this bug: https://github.com/actions/checkout/issues/1014
+        run: chmod +w -R ${GITHUB_WORKSPACE}; rm -rf ${GITHUB_WORKSPACE}/*;
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
