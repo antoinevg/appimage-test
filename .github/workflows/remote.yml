@@ -11,14 +11,14 @@ env:
 
 jobs:
   build-and-push-docker-image:
-    name: Build the gtk:test docker image
-    runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
+
+    name: Build the gtk:test docker image
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -42,6 +42,9 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/gtk:remote
 
   test-remote:
+    permissions:
+      contents: read
+
     needs: build-and-push-docker-image
 
     name: Build and test (AppImage)
