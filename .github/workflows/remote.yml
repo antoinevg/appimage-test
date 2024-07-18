@@ -7,7 +7,7 @@ name: CI-remote
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  DOCKER_IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-docker-image:
@@ -17,17 +17,12 @@ jobs:
       attestations: write
       id-token: write
 
-    name: Build the gtk:test docker image
+    name: Build the test docker image
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # - name: Cache Docker images.
-      #   uses: ScribeMD/docker-cache@0.5.0
-      #   with:
-      #     key: docker-${{ runner.os }}-${{ hashFiles("appimage/actions/build-appimage/docker/Dockerfile") }}
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
@@ -43,12 +38,18 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          #context: appimage/actions/test-action/docker/
-          context: appimage/actions/build-appimage/docker/
+          context: appimage/actions/test-action/docker/
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/gtk:remote
+          tags: ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           cache-from: type=gha, scope=${{ github.ref_name }}
           cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
+
+      * name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE_NAME}}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
 
   test-remote:
     permissions:
@@ -60,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/${{ github.repository_owner }}/gtk:remote
+      image: ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
