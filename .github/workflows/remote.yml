@@ -69,4 +69,4 @@ jobs:
       - name: Test Action
         uses: ./appimage/actions/test-action/
         with:
-          executable:   ./target/release/packetry
+          executable: ./target/release/packetry
