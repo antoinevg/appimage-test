@@ -62,7 +62,7 @@ jobs:
 
     container:
       #image: ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-      image: ghcr.io/${{ github.repository_owner }}/appimage-test:latest
+      image: ghcr.io/${{ github.repository_owner }}/antoinevg/appimage-test:latest
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
