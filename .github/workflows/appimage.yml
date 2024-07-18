@@ -1,0 +1,78 @@
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+name: CI-build-linux-appimage
+
+env:
+  GTK_VERSION: 4.14.4
+
+jobs:
+  create-docker-image:
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    name: Create Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: appimage/actions/test-action/docker/
+          push: true
+          tags: ghcr.io/${{ github.repository }}-gtk:${{ env.GTK_VERSION }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+          cache-from: type=gha, scope=${{ github.ref_name }}
+          cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ghcr.io/${{ github.repository }}-gtk # TODO ${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+  build-linux-appimage:
+    permissions:
+      contents: read
+
+    needs: create-docker-image
+
+    name: Build Linux AppImage
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/${{ github.repository }}-gtk:4.14.4 # FIXME ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+      options: --user root # see: https://github.com/actions/checkout/issues/1014
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+      volumes:
+        - /tmp/act:/tmp/act
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test Action
+        uses: ./appimage/actions/test-action/
+        with:
+          executable: ./target/release/packetry
