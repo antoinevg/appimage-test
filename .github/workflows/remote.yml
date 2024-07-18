@@ -62,9 +62,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      # see: https://github.com/actions/runner/issues/1189
       image: ghcr.io/${{ github.repository }}-testimage:${{ needs.create-docker-image.outputs.TAG }}
-      #image: ghcr.io/${{ github.repository }}-testimage:latest
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
