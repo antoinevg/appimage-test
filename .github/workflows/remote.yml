@@ -52,6 +52,7 @@ jobs:
 
     container:
       image: ghcr.io/${{ github.repository_owner }}/gtk:remote
+      options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
@@ -59,9 +60,9 @@ jobs:
         - /tmp/act:/tmp/act
 
     steps:
-      - name: cleanup old checkout
-        # see this bug: https://github.com/actions/checkout/issues/1014
-        run: chmod +w -R ${GITHUB_WORKSPACE}; rm -rf ${GITHUB_WORKSPACE}/*;
+      # - name: fix permissions error on actions/checkout@v4
+      #   # see this bug: https://github.com/actions/checkout/issues/1014
+      #   run: chmod +w -R ${GITHUB_WORKSPACE}; rm -rf ${GITHUB_WORKSPACE}/*;
 
       - name: Checkout repository
         uses: actions/checkout@v4
