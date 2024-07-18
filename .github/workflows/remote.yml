@@ -19,6 +19,12 @@ jobs:
           echo "Look ma! I am building!"
           docker build -t gtk:test appimage/actions/build-appimage/docker
 
+      - name: Cache Docker images.
+        uses: ScribeMD/docker-cache@0.5.0
+        with:
+          #key: docker-${{ runner.os }}-${{ hashFiles(paths) }}
+          key: some-key-of-mine
+
   test:
     needs: build-docker-image
 
