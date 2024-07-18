@@ -37,7 +37,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: appimage/actions/test-action/docker/
+          context: appimage/actions/build-appimage/docker/
           push: true
           tags: ghcr.io/${{ github.repository }}-gtk:${{ env.GTK_VERSION }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
           cache-from: type=gha, scope=${{ github.ref_name }}
