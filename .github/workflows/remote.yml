@@ -18,6 +18,8 @@ jobs:
 
     name: Create Docker image
     runs-on: ubuntu-latest
+    outputs:
+      TAG: ${{ env.TAG }} # see: https://github.com/actions/runner/issues/1189
 
     steps:
       - name: Checkout repository
@@ -60,7 +62,9 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/${{ github.repository }}-testimage:latest # FIXME ${{ env.TAG }}
+      # see: https://github.com/actions/runner/issues/1189
+      image: ghcr.io/${{ github.repository }}-testimage:${{ needs.create-docker-image.outputs.TAG }}
+      #image: ghcr.io/${{ github.repository }}-testimage:latest
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
