@@ -6,15 +6,29 @@ on:
 name: CI-remote
 
 jobs:
+  build-docker-image:
+    name: Build the gtk:test docker image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: This does the build
+        run: |
+          echo "Look ma! I am building!"
+          docker build -t gtk:test appimage/actions/build-appimage/docker
 
   test:
+    needs: build-docker-image
+
     name: Build and test (AppImage)
     runs-on: ubuntu-latest
 
-    #container:
-    #  image: gtk:4.14.4
-    #  volumes:
-    #    - /tmp/act:/tmp/act
+    container:
+      image: gtk:test
+      volumes:
+        - /tmp/act:/tmp/act
 
     steps:
       - name: Checkout repository

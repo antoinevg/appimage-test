@@ -201,3 +201,6 @@ ENV LDFLAGS="-L$GTK4/lib/x86_64-linux-gnu"
 ENV PKG_CONFIG_PATH="$GTK4/lib/x86_64-linux-gnu/pkgconfig"
 ENV LD_LIBRARY_PATH="$GTK4/lib/x86_64-linux-gnu"
 ENV PATH="$GTK4/bin:$PATH"
+
+#ADD entrypoint.sh /entrypoint.sh
+#ENTRYPOINT ["/entrypoint.sh"]

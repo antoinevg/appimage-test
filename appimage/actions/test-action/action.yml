@@ -12,15 +12,19 @@ inputs:
     required: true
 
 runs:
+  # the problem with this is that it does not actually run any steps, it just runs the docker image :-/
+  #using: "docker"
+  #image: ./docker/Dockerfile
+
   using: "composite"
 
   steps:
     - name: Print the name
       run: |
-        echo "Hello ${{ inputs.executable }}!"
+        echo "Print the name of the executable: ${{ inputs.executable }}"
       shell: bash
 
     - name: Print docker env var
       run: |
-        echo "Hello $GTK4!"
+        echo "Print the path for gtk4: $GTK4"
       shell: bash
