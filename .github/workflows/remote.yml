@@ -14,18 +14,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: This does the build
-        run: |
-          echo "Look ma! I am building!"
-          docker build -t gtk:test appimage/actions/build-appimage/docker
-
-      - name: Cache Docker images.
-        uses: ScribeMD/docker-cache@0.5.0
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
-          #key: docker-${{ runner.os }}-${{ hashFiles(paths) }}
-          key: some-key-of-mine
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
 
-  test:
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: appimage/actions/build-appimage/docker/
+          push: false
+          tags: "test" # ${{ steps.meta.outputs.tags }}
+          #labels: ${{ steps.meta.outputs.labels }}
+
+  test-remote:
     needs: build-docker-image
 
     name: Build and test (AppImage)
