@@ -43,8 +43,6 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/gtk:remote
           cache-from: type=gha, scope=${{ github.ref_name }}
           cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
-          #cache-from: type=gha
-          #cache-to:   type=gha, mode=max
 
   test-remote:
     permissions:
@@ -65,10 +63,6 @@ jobs:
         - /tmp/act:/tmp/act
 
     steps:
-      # - name: fix permissions error on actions/checkout@v4
-      #   # see this bug: https://github.com/actions/checkout/issues/1014
-      #   run: chmod +w -R ${GITHUB_WORKSPACE}; rm -rf ${GITHUB_WORKSPACE}/*;
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
