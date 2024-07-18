@@ -44,7 +44,7 @@ jobs:
           cache-from: type=gha, scope=${{ github.ref_name }}
           cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
 
-      * name: Generate artifact attestation
+      - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE_NAME}}
