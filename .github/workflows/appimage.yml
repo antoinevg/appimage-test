@@ -39,7 +39,8 @@ jobs:
           echo SHELL: $SHELL
           echo  PATH: $PATH
           echo  HOME: $HOME
-          ls -al $HOME
+          ls -al $HOME/
+          ls -al /root
           rustup toolchain install stable
           rustup default stable
 
