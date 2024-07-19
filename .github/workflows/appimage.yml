@@ -27,38 +27,9 @@ jobs:
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
 
     steps:
-      - name: GitHub sucks tremendously
-        run: |
-          # mv /root/.bashrc  /github/home
-          # mv /root/.cargo   /github/home
-          # mv /root/.nvm     /github/home
-          # mv /root/.profile /github/home
-          # mv /root/.rustup  /github/home
-          cp -a /root/.bashrc  /github/home
-          cp -a /root/.cargo   /github/home
-          cp -a /root/.nvm     /github/home
-          cp -a /root/.profile /github/home
-          cp -a /root/.rustup  /github/home
-
-      - name: Some Checks
-        run: |
-          # export HOME="/home/runner"
-          echo "RUNNING CHECKS"
-          echo PATH: $PATH
-          echo HOME: $HOME
-          echo whoami: `whoami`
-          echo pwd: `pwd`
-          echo which cargo: `which cargo`
-          echo RUNNER: $RUNNER
-          ls -al /github/
-          ls -al /github/home/
-          ls -al /root/
-          cat /etc/passwd
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      #- uses: Swatinem/rust-cache@v2
 
       - name: Install toolchain
           # see: https://github.com/actions/checkout/issues/1014
