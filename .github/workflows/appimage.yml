@@ -42,7 +42,7 @@ jobs:
 
       - name: Some Checks
         run: |
-          #export HOME="/home/runner"
+          # export HOME="/home/runner"
           echo "RUNNING CHECKS"
           echo PATH: $PATH
           echo HOME: $HOME
@@ -58,7 +58,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: Swatinem/rust-cache@v2
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Install toolchain
           # see: https://github.com/actions/checkout/issues/1014
