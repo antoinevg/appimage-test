@@ -70,7 +70,7 @@ jobs:
 
   create-docker-image:
     needs: changed
-    if: ${{ needs.changed.outputs.dockerfile == "true" }}
+    if: ${{ needs.changed.outputs.dockerfile == 'true' }}
 
     permissions:
       contents: read
