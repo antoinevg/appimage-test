@@ -16,26 +16,6 @@ runs:
   using: composite
 
   steps:
-    - name: Running Action checks
-      shell: bash
-      run: |
-        echo "RUNNING ACTION CHECKS"
-        echo executable: ${{ inputs.executable }}
-        echo PATH: $PATH
-        echo RUNNER: $RUNNER
-        echo HOME: $HOME
-        echo whoami: `whoami`
-        echo pwd: `pwd`
-        ls -al `pwd`
-        echo which cargo: `which cargo`
-        echo github.workspace: ${{ github.workspace }}
-        echo GITHUB_WORKSPACE: $GITHUB_WORKSPACE
-        ls -al /github/
-        ls -al /github/home/
-        ls -al /root/
-        cat /etc/passwd
-
-
     - name: Build packetry-x86_64.AppDir (Linux)
       shell: bash
       run: |

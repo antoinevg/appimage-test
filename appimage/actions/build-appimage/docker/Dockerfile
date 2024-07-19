@@ -11,12 +11,8 @@ ARG NODE_VERSION_DEFAULT
 ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
 ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
-# see: https://github.com/actions/checkout/issues/1014
-#ENV RUNNER="runner"
-#ENV HOME="/home/$RUNNER"
-ENV RUNNER="root"
-#ENV HOME="/github/home"
-ENV HOME="/root"
+ENV RUNNER="runner"
+ENV HOME="/home/$RUNNER"
 
 # - setup base system ---------------------------------------------------------
 
@@ -187,11 +183,15 @@ ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
 ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
 # see: https://github.com/actions/checkout/issues/1014
-#ENV RUNNER="runner"
-#ENV HOME="/home/$RUNNER"
+#RUN mv /home/runner/.cargo  /root
+#RUN mv /home/runner/.nvm    /root
+#RUN mv /home/runner/.rustup /root
+#ENV RUNNER="root"
+#ENV HOME="/github/home"
 ENV RUNNER="root"
-ENV HOME="/github/home"
-#ENV HOME="/root"
+ENV HOME="/home/runner"
+COPY files/etc/passwd /etc/passwd
+
 
 USER $RUNNER
 WORKDIR $HOME
@@ -218,22 +218,3 @@ ENV LDFLAGS="-L$GTK4/lib/x86_64-linux-gnu"
 ENV PKG_CONFIG_PATH="$GTK4/lib/x86_64-linux-gnu/pkgconfig"
 ENV LD_LIBRARY_PATH="$GTK4/lib/x86_64-linux-gnu"
 ENV PATH="$GTK4/bin:$PATH"
-
-# GitHub sucks tremendously
-COPY files/etc/passwd /etc/passwd
-#RUN  mkdir /github && ln -s /root /github/home
-#RUN  ln -s /root /github/home
-
-
-# some checks
-RUN echo "RUNNING CHECKS"
-RUN echo PATH: $PATH
-RUN echo HOME: $HOME
-RUN echo whoami: `whoami`
-RUN echo pwd: `pwd`
-RUN echo which cargo: `which cargo`
-RUN echo RUNNER: $RUNNER
-RUN ls -al /github/
-RUN ls -al /github/home/
-RUN ls -al /root/
-RUN cat /etc/passwd

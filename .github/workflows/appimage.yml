@@ -13,14 +13,14 @@ jobs:
     permissions:
       contents: read
 
-    #needs: create-docker-image
+    needs: create-docker-image
 
     name: Build Linux AppImage
     runs-on: ubuntu-latest
 
     container:
-      #image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.TAG }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
-      image: ghcr.io/${{ github.repository }}-gtk:4.14.4
+      image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.TAG }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+      # TODO image: ghcr.io/${{ github.repository }}-gtk:4.14.4
       #options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
@@ -30,55 +30,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: GitHub sucks tremendously
+      - name: Workaround issues when GitHub does not respect the HOME env var
         run: |
-          # mv /root/.bashrc  /github/home
-          # mv /root/.cargo   /github/home
-          # mv /root/.nvm     /github/home
-          # mv /root/.profile /github/home
-          # mv /root/.rustup  /github/home
-          cp -a /root/.bashrc  /github/home
-          cp -a /root/.cargo   /github/home
-          cp -a /root/.nvm     /github/home
-          cp -a /root/.profile /github/home
-          cp -a /root/.rustup  /github/home
-
-      - name: Running top-level Checks
-        run: |
-          # export HOME="/home/runner"
-          echo "RUNNING TOP-LEVEL CHECKS"
           echo PATH: $PATH
-          echo RUNNER: $RUNNER
           echo HOME: $HOME
-          echo whoami: `whoami`
-          echo pwd: `pwd`
+          echo  pwd: `pwd`
           ls -al `pwd`
-          echo which cargo: `which cargo`
-          echo github.workspace: ${{ github.workspace }}
+          echo  whoami: `whoami`
           echo GITHUB_WORKSPACE: $GITHUB_WORKSPACE
-          ls -al /github/
-          ls -al /github/home/
-          ls -al /root/
-          cat /etc/passwd
+          echo github.workspace: ${{ github.workspace}}
+          #mv /root/.cargo   /github/home
+          #mv /root/.nvm     /github/home
+          #mv /root/.rustup  /github/home
 
       - uses: Swatinem/rust-cache@v2
 
       - name: Install toolchain
         run: |
-          # see: https://github.com/actions/checkout/issues/1014
           rustup toolchain install stable
           rustup default stable
 
       - name: Build packetry binary
         run: |
-          # see: https://github.com/actions/checkout/issues/1014
-          #export HOME="/home/runner"
           cargo build --release
 
       - name: Test under XVFB (Linux)
         run: |
-          # see: https://github.com/actions/checkout/issues/1014
-          #export HOME="/home/runner"
           xvfb-run cargo test
         if: runner.os == 'Linux'
 
