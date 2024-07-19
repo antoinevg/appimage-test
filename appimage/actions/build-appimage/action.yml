@@ -26,6 +26,7 @@ runs:
         echo HOME: $HOME
         echo whoami: `whoami`
         echo pwd: `pwd`
+        ls -al `pwd`
         echo which cargo: `which cargo`
         echo github.workspace: ${{ github.workspace }}
         echo GITHUB_WORKSPACE: $GITHUB_WORKSPACE
