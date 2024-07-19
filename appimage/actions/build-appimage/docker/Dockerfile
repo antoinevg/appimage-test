@@ -1,7 +1,6 @@
 ARG GTK_VERSION_DEFAULT="4.14.4"
 ARG NODE_VERSION_DEFAULT="v20.15.1"
 
-
 FROM debian:10 AS builder
 LABEL maintainer="Great Scott Gadgets <dev@greatscottgadgets.com>"
 LABEL stage="builder"
