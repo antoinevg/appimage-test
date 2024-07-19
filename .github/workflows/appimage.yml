@@ -21,7 +21,6 @@ jobs:
     container:
       image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.TAG }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
       # TODO image: ghcr.io/${{ github.repository }}-gtk:4.14.4
-      #options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
@@ -32,16 +31,10 @@ jobs:
 
       - name: Workaround issues when GitHub does not respect the HOME env var
         run: |
-          echo PATH: $PATH
-          echo HOME: $HOME
-          echo  pwd: `pwd`
-          ls -al `pwd`
-          echo  whoami: `whoami`
-          echo GITHUB_WORKSPACE: $GITHUB_WORKSPACE
-          echo github.workspace: ${{ github.workspace}}
-          #mv /root/.cargo   /github/home
-          #mv /root/.nvm     /github/home
-          #mv /root/.rustup  /github/home
+          # see: https://github.com/actions/checkout/issues/1014
+          mv /root/.cargo   $HOME
+          mv /root/.nvm     $HOME
+          mv /root/.rustup  $HOME
 
       - uses: Swatinem/rust-cache@v2
 

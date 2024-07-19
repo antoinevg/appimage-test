@@ -18,13 +18,6 @@ ENV HOME="/home/$RUNNER"
 
 USER root
 
-# see: https://github.com/actions/checkout/issues/1014
-#RUN  mkdir /github && ln -s /root /github/home
-#COPY files/etc/passwd /etc/passwd
-#RUN  mkdir /github && mv /root /github/home
-#RUN cat /etc/passwd
-#RUN ls -al /github/home
-
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
     build-essential \
@@ -61,7 +54,6 @@ RUN apt update && apt upgrade -y && apt install -y \
     xvfb \
     xz-utils \
     zlib1g-dev
-
 
 # add user
 RUN useradd -ms /bin/bash runner
@@ -182,22 +174,16 @@ ARG NODE_VERSION_DEFAULT
 ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
 ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
-# see: https://github.com/actions/checkout/issues/1014
-#RUN mv /home/runner/.cargo  /root
-#RUN mv /home/runner/.nvm    /root
-#RUN mv /home/runner/.rustup /root
-#ENV RUNNER="root"
-#ENV HOME="/github/home"
-ENV RUNNER="root"
-ENV HOME="/home/runner"
-COPY files/etc/passwd /etc/passwd
 
+# - setup environment ---------------------------------------------------------
+
+# see: https://github.com/actions/checkout/issues/1014
+ENV RUNNER="root"
+ENV HOME="/github/home"
+COPY files/etc/passwd /etc/passwd
 
 USER $RUNNER
 WORKDIR $HOME
-
-
-# - setup environment ---------------------------------------------------------
 
 # appimagetool, linuxdeploy, linuxdeploy-plugin-gtk
 ENV APPIMAGE_EXTRACT_AND_RUN="1"
