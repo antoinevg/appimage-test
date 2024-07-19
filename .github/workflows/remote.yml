@@ -3,11 +3,11 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI
+name: CI-test
 
 env:
   LATEST: latest
-  TAG: $LATEST
+  TAG: ${{ env.LATEST }}
 
 jobs:
   test-remote:

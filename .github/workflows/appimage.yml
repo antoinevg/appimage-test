@@ -13,13 +13,14 @@ jobs:
     permissions:
       contents: read
 
-    needs: create-docker-image
+    # TODO needs: create-docker-image
 
     name: Build Linux AppImage
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.GTK_VERSION }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+      # TODO image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.TAG }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+      image: ghcr.io/${{ github.repository }}-gtk:4.14.4
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
@@ -72,7 +73,7 @@ jobs:
     name: Create Docker image
     runs-on: ubuntu-latest
     outputs:
-      GTK_VERSION: ${{ env.GTK_VERSION }} # see: https://github.com/actions/runner/issues/1189
+      TAG: ${{ env.GTK_VERSION }} # see: https://github.com/actions/runner/issues/1189
 
     steps:
       - name: Check variables
