@@ -19,9 +19,21 @@ runs:
     - name: Do the first thing
       shell: bash
       run: |
-        echo SHELL: $SHELL
-        echo HOME: $HOME
+        echo "RUNNING ACTION CHECKS"
         echo executable: ${{ inputs.executable }}
+        echo PATH: $PATH
+        echo RUNNER: $RUNNER
+        echo HOME: $HOME
+        echo whoami: `whoami`
+        echo pwd: `pwd`
+        echo which cargo: `which cargo`
+        echo github.workspace: ${{ github.workspace }}
+        echo GITHUB_WORKSPACE: $GITHUB_WORKSPACE
+        ls -al /github/
+        ls -al /github/home/
+        ls -al /root/
+        cat /etc/passwd
+
 
     - name: Build packetry-x86_64.AppDir (Linux)
       shell: bash
