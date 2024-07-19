@@ -11,7 +11,8 @@ ARG NODE_VERSION_DEFAULT
 ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
 ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
-ENV HOME="/home/runner"
+ENV RUNNER="runner"
+ENV HOME="/home/$RUNNER"
 
 # - setup base system ---------------------------------------------------------
 
@@ -73,7 +74,7 @@ RUN chmod 0755 /usr/bin/appimagetool-x86_64.AppImage \
 
 
 # nodejs for Swatinem/rust-cache@v2
-USER runner
+USER $RUNNER
 WORKDIR $HOME
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -81,7 +82,7 @@ RUN /bin/bash -c "source $HOME/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm u
 
 
 # pyenv
-USER runner
+USER $RUNNER
 WORKDIR $HOME
 
 ENV PYENV_ROOT="$HOME/.pyenv"
@@ -92,7 +93,7 @@ RUN pyenv install 3.8 && pyenv global 3.8 && pyenv rehash && pip install --upgra
 
 
 # rust
-USER runner
+USER $RUNNER
 WORKDIR $HOME
 
 # We could cut half a gig from the image if the GitHub Action could do this instead:
@@ -103,7 +104,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profi
 
 
 # - setup gtk-4 build ---------------------------------------------------------
-USER runner
+USER $RUNNER
 WORKDIR $HOME
 
 ENV GTK_SOURCE="$HOME/gtk-$GTK_VERSION"
@@ -139,7 +140,7 @@ RUN patch -p1 < ./gtk-4.14.4-gcc-lt-9.patch
 
 # - build gtk-4 ---------------------------------------------------------------
 
-USER runner
+USER $RUNNER
 WORKDIR $GTK_SOURCE/builddir
 
 RUN ninja
@@ -155,7 +156,7 @@ RUN ninja install
 
 # - cleanup -------------------------------------------------------------------
 
-USER runner
+USER $RUNNER
 WORKDIR $HOME
 
 RUN rm -rf \
@@ -174,9 +175,13 @@ ARG NODE_VERSION_DEFAULT
 ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
 ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
+# see: https://github.com/actions/checkout/issues/1014
+#ENV RUNNER="runner"
+#ENV HOME="/home/$RUNNER"
+ENV RUNNER="root"
 ENV HOME="/home/runner"
 
-USER runner
+USER $RUNNER
 WORKDIR $HOME
 
 

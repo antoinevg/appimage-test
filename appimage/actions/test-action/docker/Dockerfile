@@ -14,7 +14,11 @@ RUN useradd -ms /bin/bash runner
 FROM debian:10
 COPY --from=builder / /
 
+# see: https://github.com/actions/checkout/issues/1014
+#ENV RUNNER="runner"
+#ENV HOME="/home/$RUNNER"
+ENV RUNNER="root"
 ENV HOME="/home/runner"
 
-USER runner
+USER $RUNNER
 WORKDIR $HOME

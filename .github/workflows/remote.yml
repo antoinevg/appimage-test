@@ -9,7 +9,33 @@ env:
   TAG: latest
 
 jobs:
-  create-docker-image:
+  test-remote:
+    permissions:
+      contents: read
+
+    needs: test-remote-create-docker-image
+
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    container:
+      image: ghcr.io/${{ github.repository }}-testimage:${{ needs.create-docker-image.outputs.TAG }}
+      #options: --user root # see: https://github.com/actions/checkout/issues/1014
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test Action
+        uses: ./appimage/actions/test-action/
+        with:
+          executable: ./target/release/packetry
+
+
+  test-remote-create-docker-image:
     permissions:
       contents: read
       packages: write
@@ -51,30 +77,3 @@ jobs:
           subject-name: ghcr.io/${{ github.repository }}-testimage
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
-
-  test-remote:
-    permissions:
-      contents: read
-
-    needs: create-docker-image
-
-    name: Build and test
-    runs-on: ubuntu-latest
-
-    container:
-      image: ghcr.io/${{ github.repository }}-testimage:${{ needs.create-docker-image.outputs.TAG }}
-      options: --user root # see: https://github.com/actions/checkout/issues/1014
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
-      volumes:
-        - /tmp/act:/tmp/act
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Test Action
-        uses: ./appimage/actions/test-action/
-        with:
-          executable: ./target/release/packetry
