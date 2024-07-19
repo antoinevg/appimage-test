@@ -17,10 +17,14 @@ runs:
 
   steps:
     - name: Do the first thing
+      shell: bash
       run: |
-        echo Shell: $SHELL  "Executable: ${{ inputs.executable }}"
+        echo SHELL: $SHELL
+        echo HOME: $HOME
+        echo executable: ${{ inputs.executable }}
 
     - name: Build packetry-x86_64.AppDir (Linux)
+      shell: bash
       run: |
         DEPLOY_GTK_VERSION=4 linuxdeploy-x86_64.AppImage \
           --appimage-extract-and-run \
@@ -31,6 +35,7 @@ runs:
           --desktop-file ${{ inputs.desktop-file }}
 
     - name: Shrink packetry-x86_64.AppDir (Linux)
+      shell: bash
       run: |
         # cd to AppDir lib directory
         cd ${{ github.workspace }}/packetry.AppDir/usr/lib
@@ -97,6 +102,7 @@ runs:
         cd ${{ github.workspace }}
 
     - name: Build packetry-x86_64.AppImage (Linux)
+      shell: bash
       run: |
         appimagetool-x86_64.AppImage \
           --appimage-extract-and-run \

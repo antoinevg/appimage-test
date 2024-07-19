@@ -3,11 +3,10 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI
+name: CI-test
 
 env:
-  LATEST: latest
-  TAG: ${{ env.LATEST }}
+  TAG: latest
 
 defaults:
   run:

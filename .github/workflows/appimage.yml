@@ -21,7 +21,7 @@ jobs:
     container:
       # TODO image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.TAG }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
       image: ghcr.io/${{ github.repository }}-gtk:4.14.4
-      options: --user root # see: https://github.com/actions/checkout/issues/1014
+      #options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
@@ -34,26 +34,19 @@ jobs:
 
       - name: Install toolchain
         run: |
-          export HOME="/home/runner"
           echo $PATH
           echo $HOME
-          echo $USER
+          export HOME="/home/runner"
           rustup toolchain install stable
           rustup default stable
 
       - name: Build packetry binary
         run: |
-          echo $PATH
-          echo $HOME
-          echo $USER
           export HOME="/home/runner"
           cargo build --release
 
       - name: Test under XVFB (Linux)
         run: |
-          echo $PATH
-          echo $HOME
-          echo $USER
           export HOME="/home/runner"
           xvfb-run cargo test
         if: runner.os == 'Linux'
