@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI!
+name: CI
 
 env:
   GTK_VERSION: 4.14.4
@@ -34,6 +34,8 @@ jobs:
       - name: Install toolchain
         run: |
           echo $PATH
+          echo $HOME
+          echo $USER
           rustup toolchain install stable
           rustup default stable
 
