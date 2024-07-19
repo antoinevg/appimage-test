@@ -25,7 +25,7 @@ USER root
 RUN  mkdir /github && ln -s /root /github/home
 COPY files/etc/passwd /etc/passwd
 RUN cat /etc/passwd
-RUN ls -al /github/runner
+RUN ls -al /github/home
 
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
