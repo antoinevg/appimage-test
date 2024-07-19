@@ -22,9 +22,10 @@ ENV HOME="/github/home"
 USER root
 
 # see: https://github.com/actions/checkout/issues/1014
-RUN mkdir /github && ln -s /root /github/home
-ADD files/etc/ /
+RUN  mkdir /github && ln -s /root /github/home
+COPY files/etc/passwd /etc/passwd
 RUN cat /etc/passwd
+RUN ls -al /github/runner
 
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
