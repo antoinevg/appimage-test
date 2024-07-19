@@ -43,16 +43,19 @@ jobs:
           cp -a /root/.profile /github/home
           cp -a /root/.rustup  /github/home
 
-      - name: Some Checks
+      - name: Running top-level Checks
         run: |
           # export HOME="/home/runner"
-          echo "RUNNING CHECKS"
+          echo "RUNNING TOP-LEVEL CHECKS"
           echo PATH: $PATH
+          echo RUNNER: $RUNNER
           echo HOME: $HOME
           echo whoami: `whoami`
           echo pwd: `pwd`
+          ls -al `pwd`
           echo which cargo: `which cargo`
-          echo RUNNER: $RUNNER
+          echo github.workspace: ${{ github.workspace }}
+          echo GITHUB_WORKSPACE: $GITHUB_WORKSPACE
           ls -al /github/
           ls -al /github/home/
           ls -al /root/

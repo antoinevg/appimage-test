@@ -16,7 +16,7 @@ runs:
   using: composite
 
   steps:
-    - name: Do the first thing
+    - name: Running Action checks
       shell: bash
       run: |
         echo "RUNNING ACTION CHECKS"
@@ -51,7 +51,7 @@ runs:
       shell: bash
       run: |
         # cd to AppDir lib directory
-        cd ${{ github.workspace }}/packetry.AppDir/usr/lib
+        cd $GITHUB_WORKSPACE/packetry.AppDir/usr/lib
 
         # fix symlinks
         rm libgdk_pixbuf-2.0.so
@@ -112,7 +112,7 @@ runs:
         strip lib*.so.*
 
         # return to workspace directory
-        cd ${{ github.workspace }}
+        cd $GITHUB_WORKSPACE
 
     - name: Build packetry-x86_64.AppImage (Linux)
       shell: bash
