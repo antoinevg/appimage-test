@@ -22,8 +22,9 @@ ENV HOME="/github/home"
 USER root
 
 # see: https://github.com/actions/checkout/issues/1014
-RUN  mkdir /github && ln -s /root /github/home
+#RUN  mkdir /github && ln -s /root /github/home
 COPY files/etc/passwd /etc/passwd
+RUN  mkdir /github && mv /root /github/home
 RUN cat /etc/passwd
 RUN ls -al /github/home
 
@@ -216,5 +217,15 @@ ENV PKG_CONFIG_PATH="$GTK4/lib/x86_64-linux-gnu/pkgconfig"
 ENV LD_LIBRARY_PATH="$GTK4/lib/x86_64-linux-gnu"
 ENV PATH="$GTK4/bin:$PATH"
 
-#ADD entrypoint.sh /entrypoint.sh
-#ENTRYPOINT ["/entrypoint.sh"]
+
+# some checks
+RUN echo "RUNNING CHECKS"
+RUN echo PATH: $PATH
+RUN echo HOME: $HOME
+RUN echo whoami: `whoami`
+RUN echo pwd: `pwd`
+RUN echo which cargo: `which cargo`
+RUN echo RUNNER: $RUNNER
+RUN ls -al /github
+RUN ls -al /github/home
+RUN ls -al /root
