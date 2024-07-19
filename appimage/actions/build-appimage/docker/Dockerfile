@@ -11,8 +11,11 @@ ARG NODE_VERSION_DEFAULT
 ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
 ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
-ENV RUNNER="runner"
-ENV HOME="/home/$RUNNER"
+# see: https://github.com/actions/checkout/issues/1014
+#ENV RUNNER="runner"
+#ENV HOME="/home/$RUNNER"
+ENV RUNNER="root"
+ENV HOME="/home/runner"
 
 # - setup base system ---------------------------------------------------------
 

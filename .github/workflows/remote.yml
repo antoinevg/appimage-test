@@ -3,10 +3,11 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI-remote
+name: CI
 
 env:
-  TAG: latest
+  LATEST: latest
+  TAG: $LATEST
 
 jobs:
   test-remote:
@@ -19,11 +20,11 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/${{ github.repository }}-testimage:${{ needs.create-docker-image.outputs.TAG }}
-      #options: --user root # see: https://github.com/actions/checkout/issues/1014
+      image: ghcr.io/${{ github.repository }}-testimage:${{ needs.test-remote-create-docker-image.outputs.TAG }}
+      options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+       2 password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
 
     steps:
       - name: Checkout repository

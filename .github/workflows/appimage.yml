@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI-build-linux-appimage
+name: CI!
 
 env:
   GTK_VERSION: 4.14.4
@@ -20,7 +20,7 @@ jobs:
 
     container:
       image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.GTK_VERSION }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
-      #options: --user root # see: https://github.com/actions/checkout/issues/1014
+      options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
