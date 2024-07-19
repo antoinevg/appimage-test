@@ -42,10 +42,20 @@ jobs:
           rustup default stable
 
       - name: Build packetry binary
-        run: cargo build --release
+        run: |
+          echo $PATH
+          echo $HOME
+          echo $USER
+          export HOME="/home/runner"
+          cargo build --release
 
       - name: Test under XVFB (Linux)
-        run: xvfb-run cargo test
+        run: |
+          echo $PATH
+          echo $HOME
+          echo $USER
+          export HOME="/home/runner"
+          xvfb-run cargo test
         if: runner.os == 'Linux'
 
       - name: Run build-appimage action (Linux)

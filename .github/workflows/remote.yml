@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI-test
+name: CI
 
 env:
   LATEST: latest
@@ -29,7 +29,7 @@ jobs:
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
-       2 password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+        password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
 
     steps:
       - name: Checkout repository
