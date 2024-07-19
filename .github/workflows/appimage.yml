@@ -34,20 +34,24 @@ jobs:
 
       - name: Install toolchain
         run: |
-          echo $PATH
-          echo $HOME
-          export HOME="/home/runner"
+          # see: https://github.com/actions/checkout/issues/1014
+          #export HOME="/home/runner"
+          echo SHELL: $SHELL
+          echo  PATH: $PATH
+          echo  HOME: $HOME
           rustup toolchain install stable
           rustup default stable
 
       - name: Build packetry binary
         run: |
-          export HOME="/home/runner"
+          # see: https://github.com/actions/checkout/issues/1014
+          #export HOME="/home/runner"
           cargo build --release
 
       - name: Test under XVFB (Linux)
         run: |
-          export HOME="/home/runner"
+          # see: https://github.com/actions/checkout/issues/1014
+          #export HOME="/home/runner"
           xvfb-run cargo test
         if: runner.os == 'Linux'
 

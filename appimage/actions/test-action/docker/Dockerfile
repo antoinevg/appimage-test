@@ -18,7 +18,7 @@ COPY --from=builder / /
 #ENV RUNNER="runner"
 #ENV HOME="/home/$RUNNER"
 ENV RUNNER="root"
-ENV HOME="/home/runner"
+ENV HOME="/github/home"
 
 USER $RUNNER
 WORKDIR $HOME

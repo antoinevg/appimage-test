@@ -15,7 +15,7 @@ ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 #ENV RUNNER="runner"
 #ENV HOME="/home/$RUNNER"
 ENV RUNNER="root"
-ENV HOME="/home/runner"
+ENV HOME="/github/home"
 
 # - setup base system ---------------------------------------------------------
 
@@ -182,7 +182,7 @@ ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 #ENV RUNNER="runner"
 #ENV HOME="/home/$RUNNER"
 ENV RUNNER="root"
-ENV HOME="/home/runner"
+ENV HOME="/github/home"
 
 USER $RUNNER
 WORKDIR $HOME
