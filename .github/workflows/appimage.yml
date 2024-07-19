@@ -40,25 +40,25 @@ jobs:
           cp -a /root/.profile /github/home
           cp -a /root/.rustup  /github/home
 
-      # - name: Some Checks
-      #   run: |
-      #     # export HOME="/home/runner"
-      #     echo "RUNNING CHECKS"
-      #     echo PATH: $PATH
-      #     echo HOME: $HOME
-      #     echo whoami: `whoami`
-      #     echo pwd: `pwd`
-      #     echo which cargo: `which cargo`
-      #     echo RUNNER: $RUNNER
-      #     ls -al /github/
-      #     ls -al /github/home/
-      #     ls -al /root/
-      #     cat /etc/passwd
+      - name: Some Checks
+        run: |
+          # export HOME="/home/runner"
+          echo "RUNNING CHECKS"
+          echo PATH: $PATH
+          echo HOME: $HOME
+          echo whoami: `whoami`
+          echo pwd: `pwd`
+          echo which cargo: `which cargo`
+          echo RUNNER: $RUNNER
+          ls -al /github/
+          ls -al /github/home/
+          ls -al /root/
+          cat /etc/passwd
 
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: Swatinem/rust-cache@v2
+      #- uses: Swatinem/rust-cache@v2
 
       - name: Install toolchain
           # see: https://github.com/actions/checkout/issues/1014
