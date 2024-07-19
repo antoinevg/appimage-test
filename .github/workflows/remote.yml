@@ -9,6 +9,11 @@ env:
   LATEST: latest
   TAG: ${{ env.LATEST }}
 
+defaults:
+  run:
+    shell: bash
+    working-directory: /home/runner
+
 jobs:
   test-remote:
     permissions:
@@ -29,6 +34,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Check environment
+        run: |
+          echo $PATH
+          echo $HOME
+          echo $USER
 
       - name: Test Action
         uses: ./appimage/actions/test-action/
