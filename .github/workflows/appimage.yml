@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/${{ github.repository }}-gtk:${{ needs.create-docker-image.outputs.TAG }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
-      # TODO image: ghcr.io/${{ github.repository }}-gtk:4.14.4
+      image: ghcr.io/${{ needs.create-docker-image.outputs.NAME }}:${{ needs.create-docker-image.outputs.TAG }}
+      # TODO image: ghcr.io/${{ github.repository }}-gtk-4.14.4:main
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
@@ -69,6 +69,9 @@ jobs:
 
 
   create-docker-image:
+    needs: changed
+    if: ${{ needs.changed.outputs.dockerfile == "true" }}
+
     permissions:
       contents: read
       packages: write
@@ -78,19 +81,10 @@ jobs:
     name: Create Docker image
     runs-on: ubuntu-latest
     outputs:
-      TAG: ${{ env.GTK_VERSION }} # see: https://github.com/actions/runner/issues/1189
+      NAME: ${{ github.repository }}-gtk-${{ env.GTK_VERSION }}
+      TAG:  ${{ github.ref_name }}
 
     steps:
-      - name: Check variables
-        run: |
-          echo     OWNER IS: ${{ github.repository_owner }}
-          echo     REPO  IS: ${{ github.repository }}
-          echo  REGISTRY IS:  ${{ env.REGISTRY }}
-          echo     ACTOR IS:  ${{ github.actor }}
-          echo    SECRET IS:  ${{ secrets.DOCKER_REGISTRY_TOKEN }}
-          echo     IMAGE IS:  ${{ env.IMAGE_NAME }}
-          echo  REF_NAME IS:  ${{ github.ref_name }}
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -110,13 +104,28 @@ jobs:
         with:
           context: appimage/actions/build-appimage/docker/
           push: true
-          tags: ghcr.io/${{ github.repository }}-gtk:${{ env.GTK_VERSION }} # TODO ${{ env.IMAGE_NAME }}:${{ env.TAG }}
+          tags: ghcr.io/${{ github.repository }}-gtk-${{ env.GTK_VERSION }}:${{ github.ref_name }}
           cache-from: type=gha, scope=${{ github.ref_name }}
           cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ghcr.io/${{ github.repository }}-gtk # TODO ${{ env.IMAGE_NAME }}
+          subject-name: ghcr.io/${{ github.repository }}-gtk-${{ env.GTK_VERSION }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+
+  changed:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      dockerfile: ${{ steps.filter.outputs.dockerfile }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            dockerfile:
+              - "appimage/actions/build-appimage/docker/**"

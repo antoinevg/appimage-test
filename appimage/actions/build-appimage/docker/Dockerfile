@@ -167,6 +167,7 @@ RUN rm -rf \
 # - squish --------------------------------------------------------------------
 
 FROM debian:10
+LABEL stage="squish"
 COPY --from=builder / /
 
 ARG GTK_VERSION_DEFAULT

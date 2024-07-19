@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI-test
+name: CI
 
 env:
   TAG: latest
