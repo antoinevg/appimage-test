@@ -21,6 +21,9 @@ ENV HOME="/github/home"
 
 USER root
 
+# see: https://github.com/actions/checkout/issues/1014
+usermod -m -d $HOME $RUNNER
+
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
     build-essential \
