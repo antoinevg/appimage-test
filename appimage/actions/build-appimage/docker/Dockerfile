@@ -229,3 +229,4 @@ RUN echo RUNNER: $RUNNER
 RUN ls -al /github
 RUN ls -al /github/home
 RUN ls -al /root
+RUN cat /etc/passwd
