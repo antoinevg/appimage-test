@@ -15,7 +15,8 @@ ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 #ENV RUNNER="runner"
 #ENV HOME="/home/$RUNNER"
 ENV RUNNER="root"
-ENV HOME="/github/home"
+#ENV HOME="/github/home"
+ENV HOME="/root"
 
 # - setup base system ---------------------------------------------------------
 
@@ -23,10 +24,10 @@ USER root
 
 # see: https://github.com/actions/checkout/issues/1014
 #RUN  mkdir /github && ln -s /root /github/home
-COPY files/etc/passwd /etc/passwd
-RUN  mkdir /github && mv /root /github/home
-RUN cat /etc/passwd
-RUN ls -al /github/home
+#COPY files/etc/passwd /etc/passwd
+#RUN  mkdir /github && mv /root /github/home
+#RUN cat /etc/passwd
+#RUN ls -al /github/home
 
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
@@ -190,6 +191,7 @@ ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 #ENV HOME="/home/$RUNNER"
 ENV RUNNER="root"
 ENV HOME="/github/home"
+#ENV HOME="/root"
 
 USER $RUNNER
 WORKDIR $HOME
@@ -217,6 +219,11 @@ ENV PKG_CONFIG_PATH="$GTK4/lib/x86_64-linux-gnu/pkgconfig"
 ENV LD_LIBRARY_PATH="$GTK4/lib/x86_64-linux-gnu"
 ENV PATH="$GTK4/bin:$PATH"
 
+# GitHub sucks tremendously
+COPY files/etc/passwd /etc/passwd
+#RUN  mkdir /github && ln -s /root /github/home
+#RUN  ln -s /root /github/home
+
 
 # some checks
 RUN echo "RUNNING CHECKS"
@@ -226,7 +233,7 @@ RUN echo whoami: `whoami`
 RUN echo pwd: `pwd`
 RUN echo which cargo: `which cargo`
 RUN echo RUNNER: $RUNNER
-RUN ls -al /github
-RUN ls -al /github/home
-RUN ls -al /root
+RUN ls -al /github/
+RUN ls -al /github/home/
+RUN ls -al /root/
 RUN cat /etc/passwd
