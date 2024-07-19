@@ -32,9 +32,9 @@ jobs:
       - name: Workaround issues when GitHub does not respect the HOME env var
         run: |
           # see: https://github.com/actions/checkout/issues/1014
-          mv /root/.cargo   $HOME
-          mv /root/.nvm     $HOME
-          mv /root/.rustup  $HOME
+          mv /home/runner/.cargo   $HOME
+          mv /home/runner/.nvm     $HOME
+          mv /home/runner/.rustup  $HOME
 
       - uses: Swatinem/rust-cache@v2
 
