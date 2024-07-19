@@ -31,6 +31,7 @@ jobs:
 
       - name: Workaround issues when GitHub does not respect the HOME env var
         run: |
+          # GitHub Actions only supports containers running as root
           # see: https://github.com/actions/checkout/issues/1014
           mv /home/runner/.cargo   $HOME
           mv /home/runner/.nvm     $HOME

@@ -178,7 +178,8 @@ ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
 # - setup environment ---------------------------------------------------------
 
-# see: https://github.com/actions/checkout/issues/1014
+# GitHub Actions only supports containers running as root
+# See: https://github.com/actions/checkout/issues/1014
 ENV RUNNER="root"
 ENV HOME="/github/home"
 COPY files/etc/passwd /etc/passwd
