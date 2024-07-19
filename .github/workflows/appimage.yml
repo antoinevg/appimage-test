@@ -123,6 +123,9 @@ jobs:
     outputs:
       dockerfile: ${{ steps.filter.outputs.dockerfile }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - uses: dorny/paths-filter@v3
         id: filter
         with:
