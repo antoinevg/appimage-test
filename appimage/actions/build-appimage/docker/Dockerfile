@@ -22,7 +22,8 @@ ENV HOME="/github/home"
 USER root
 
 # see: https://github.com/actions/checkout/issues/1014
-RUN usermod --move-home --home $HOME $RUNNER
+RUN cat /etc/passwd
+RUN usermod -m -d $HOME $RUNNER
 
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
