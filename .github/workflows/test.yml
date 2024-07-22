@@ -3,7 +3,7 @@ on:
   pull_request:
   workflow_dispatch:
 
-name: CI
+name: TEST
 
 env:
   IMAGE_NAME: ${{ github.repository }}-test
