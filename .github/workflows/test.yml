@@ -32,6 +32,9 @@ jobs:
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
 
     steps:
+      - name: Check image tag
+        run: echo "IMAGE_TAG: ${{ IMAGE_TAG }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -62,6 +65,12 @@ jobs:
       TAG:  ${{ env.IMAGE_TAG }}
 
     steps:
+      - name: Escape image tag
+        run: echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} tr | sed -e 's/\//-/g')" >> $GITHUB_ENV
+
+      - name: Check image tag
+        run: echo "IMAGE_TAG: ${{ IMAGE_TAG }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
