@@ -90,7 +90,6 @@ jobs:
       - name: Escape image tag
         run: |
           echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} | sed -e 's/\//-/g')" >> $GITHUB_ENV
-          echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} | sed -e 's/\//-/g')" >> $GITHUB_ENV
 
       - name: Check image tag
         run: |
@@ -155,7 +154,7 @@ jobs:
         with:
           context: appimage/docker/
           push: true
-          tags: ghcr.io/${{ github.repository }}-gtk-${{ env.GTK_VERSION }}:${{ github.ref_name }}
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           cache-from: type=gha, scope=${{ github.ref_name }}
           cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
 
@@ -163,6 +162,6 @@ jobs:
         if: ${{ steps.changed.outputs.dockerfile == 'true' || steps.exists.outputs.dockerimage == 'false' }}
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ghcr.io/${{ github.repository }}-gtk-${{ env.GTK_VERSION }}
+          subject-name: ghcr.io/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
