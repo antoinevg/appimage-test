@@ -5,6 +5,10 @@ on:
 
 name: CI
 
+env:
+  IMAGE_NAME: ${{ github.repository }}-test
+  IMAGE_TAG:  ${{ github.ref_name }}
+
 defaults:
   run:
     shell: bash
@@ -54,8 +58,8 @@ jobs:
     name: Create Test Docker image
     runs-on: ubuntu-latest
     outputs:
-      NAME: ${{ github.repository }}-test
-      TAG:  ${{ github.ref_name }}
+      NAME: ${{ env.IMAGE_NAME }}
+      TAG:  ${{ env.IMAGE_TAG }}
 
     steps:
       - name: Checkout repository
@@ -84,13 +88,13 @@ jobs:
         with:
           context: appimage/test/docker/
           push: true
-          tags: ghcr.io/${{ github.repository }}-test:${{ github.ref_name }}
-          cache-from: type=gha, scope=${{ github.ref_name }}
-          cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          cache-from: type=gha, scope=${{ env.IMAGE_TAG }}
+          cache-to:   type=gha,  scope=${{ env.IMAGE_TAG }}, mode=max
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ghcr.io/${{ github.repository }}-test
+          subject-name: ghcr.io/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
