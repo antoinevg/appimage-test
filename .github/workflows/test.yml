@@ -36,6 +36,8 @@ jobs:
         run: |
           echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
           echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
+          echo "NAME:       ${{ needs.create-test-docker-image.outputs.NAME }}"
+          echo "TAG:        ${{ needs.create-test-docker-image.outputs.TAG }}"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,7 +70,9 @@ jobs:
 
     steps:
       - name: Escape image tag
-        run: echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} | sed -e 's/\//-/g')" >> $GITHUB_ENV
+        run: |
+          echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} | sed -e 's/\//-/g')" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} | sed -e 's/\//-/g')" >> $GITHUB_ENV
 
       - name: Check image tag
         run: |
