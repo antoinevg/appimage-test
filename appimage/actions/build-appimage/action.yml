@@ -1,4 +1,4 @@
-name: "Build AppImage"
+name: "AppImage"
 description: "Builds a Linux AppImage on Debian 10 (Buster)"
 inputs:
   executable:
