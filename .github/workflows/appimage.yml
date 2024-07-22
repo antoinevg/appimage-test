@@ -67,7 +67,7 @@ jobs:
           name: Linux AppImage binary
           path: |
             packetry-x86_64.AppImage
-            packetry-x86_64.AppDir
+            packetry.AppDir
           if-no-files-found: error
 
 
