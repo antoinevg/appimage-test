@@ -15,13 +15,13 @@ jobs:
     permissions:
       contents: read
 
-    needs: test-remote-create-docker-image
+    needs: test-create-docker-image
 
     name: Build and test
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/${{ needs.create-docker-image.outputs.NAME }}:${{ needs.create-docker-image.outputs.TAG }}
+      image: ghcr.io/${{ needs.test-create-docker-image.outputs.NAME }}:${{ needs.test-create-docker-image.outputs.TAG }}
       options: --user root # see: https://github.com/actions/checkout/issues/1014
       credentials:
         username: ${{ github.actor }}
@@ -44,7 +44,7 @@ jobs:
           executable: ./target/release/packetry
 
 
-  test-remote-create-docker-image:
+  test-create-docker-image:
     permissions:
       contents: read
       packages: write
