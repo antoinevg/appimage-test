@@ -33,7 +33,9 @@ jobs:
 
     steps:
       - name: Check image tag
-        run: echo "IMAGE_TAG: ${{ IMAGE_TAG }}"
+        run: |
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+          echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -69,7 +71,9 @@ jobs:
         run: echo "IMAGE_TAG=$(echo ${{ env.IMAGE_TAG }} tr | sed -e 's/\//-/g')" >> $GITHUB_ENV
 
       - name: Check image tag
-        run: echo "IMAGE_TAG: ${{ IMAGE_TAG }}"
+        run: |
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+          echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
 
       - name: Checkout repository
         uses: actions/checkout@v4
