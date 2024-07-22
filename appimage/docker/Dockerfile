@@ -19,10 +19,12 @@ USER root
 
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
+    bison \
     build-essential \
     cmake \
     curl \
     desktop-file-utils \
+    flex \
     git \
     libbz2-dev \
     libdrm-dev \
@@ -102,6 +104,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profi
 
 
 # - setup gtk-4 build ---------------------------------------------------------
+
 USER $RUNNER
 WORKDIR $HOME
 
@@ -129,7 +132,8 @@ RUN meson setup --prefix /opt/gtk-$GTK_VERSION builddir \
         -Dbuild-testsuite=false \
         -Dbuild-tests=false \
         -Dbuild-examples=false \
-        -Dbuild-demos=false
+        -Dbuild-demos=false \
+        -Dintrospection=enabled
 
 # patch glibc for gcc < 9.1
 ADD patches/gtk-4.14.4-gcc-lt-9.patch .
@@ -165,14 +169,14 @@ RUN rm -rf \
 
 # - squish --------------------------------------------------------------------
 
-FROM debian:10
-LABEL stage="squish"
-COPY --from=builder / /
+# FROM debian:10
+# LABEL stage="squish"
+# COPY --from=builder / /
 
-ARG GTK_VERSION_DEFAULT
-ARG NODE_VERSION_DEFAULT
-ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
-ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
+# ARG GTK_VERSION_DEFAULT
+# ARG NODE_VERSION_DEFAULT
+# ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
+# ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
 
 # - setup environment ---------------------------------------------------------
