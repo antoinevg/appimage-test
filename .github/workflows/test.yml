@@ -1,6 +1,6 @@
 on:
   push:
-  pull_request:
+  #pull_request:
   workflow_dispatch:
 
 name: CI
@@ -85,6 +85,7 @@ jobs:
         uses: dorny/paths-filter@v3
         id: changed
         with:
+          base: ${{ github.ref_name }}
           filters: |
             dockerfile:
               - "appimage/test/docker/**"
@@ -141,7 +142,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           cache-from: type=gha, scope=${{ env.IMAGE_TAG }}
-          cache-to:   type=gha,  scope=${{ env.IMAGE_TAG }}, mode=max
+          cache-to:   type=gha, scope=${{ env.IMAGE_TAG }}, mode=max
 
       - name: Generate artifact attestation
         if: ${{ steps.changed.outputs.dockerfile == 'true' || steps.exists.outputs.dockerimage == 'false'  }}
