@@ -9,7 +9,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}-test
   IMAGE_TAG:  ${{ github.ref_name }}
   GTK_VERSION: 4.14.4
-  FOO:        foo-${{ env.GTK_VERSION }}-foo
+  FOO:        foo-${{ GTK_VERSION }}-foo
 
 defaults:
   run:
