@@ -52,8 +52,8 @@ jobs:
           xvfb-run cargo test
         if: runner.os == 'Linux'
 
-      - name: Run build-appimage action (Linux)
-        uses: ./appimage/actions/build-appimage/
+      - name: Run build appimage action (Linux)
+        uses: ./appimage/
         with:
           executable:   ./target/release/packetry
           icon-file:    ./appimage/dist/icon.png
@@ -90,7 +90,7 @@ jobs:
         with:
           filters: |
             dockerfile:
-              - "appimage/actions/build-appimage/docker/**"
+              - "appimage/docker/**"
 
       - name: Log in to the Container registry
         if: ${{ steps.changed.outputs.dockerfile == 'true' }}
@@ -109,7 +109,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: appimage/actions/build-appimage/docker/
+          context: appimage/docker/
           push: true
           tags: ghcr.io/${{ github.repository }}-gtk-${{ env.GTK_VERSION }}:${{ github.ref_name }}
           cache-from: type=gha, scope=${{ github.ref_name }}

@@ -39,7 +39,7 @@ jobs:
           ls -al
 
       - name: Test Action
-        uses: ./appimage/actions/test-action/
+        uses: ./appimage/test/
         with:
           executable: ./target/release/packetry
 
@@ -75,7 +75,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: appimage/actions/test-action/docker/
+          context: appimage/test/docker/
           push: true
           tags: ghcr.io/${{ github.repository }}-testimage:${{ env.TAG }}
           cache-from: type=gha, scope=${{ github.ref_name }}
