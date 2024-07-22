@@ -34,8 +34,6 @@ jobs:
     steps:
       - name: Check image tag
         run: |
-          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
-          echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
           echo "NAME:       ${{ needs.create-test-docker-image.outputs.NAME }}"
           echo "TAG:        ${{ needs.create-test-docker-image.outputs.TAG }}"
 
