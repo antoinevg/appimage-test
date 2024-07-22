@@ -90,11 +90,7 @@ jobs:
       - name: Check if docker image exists output
         shell: bash
         run: |
-          echo "We got this 1: ${{ steps.exists.outputs.dockerimage }}"
-          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
-          echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
-          echo "USER_NAME:  ${{ github.username }}"
-          echo "ORG:        ${{ github.organization }}"
+          echo "We got this: ${{ steps.exists.outputs.dockerimage }}"
 
       - name: Check if check is true
         if: ${{ steps.exists.outputs.dockerimage == 'true'  }}
