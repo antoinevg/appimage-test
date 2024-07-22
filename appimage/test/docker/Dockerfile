@@ -24,7 +24,7 @@ ENV HOME="/github/home"
 ENV GTK_VERSION="4.14.4"
 ENV GTK4="/opt/gtk-$GTK_VERSION"
 
-# bump: 1
+# bump: 2
 
 USER $RUNNER
 WORKDIR $HOME
