@@ -8,6 +8,8 @@ name: CI
 env:
   IMAGE_NAME: ${{ github.repository }}-test
   IMAGE_TAG:  ${{ github.ref_name }}
+  GTK_VERSION: 4.14.4
+  FOO:        foo-${{ env.GTK_VERSION }}-foo
 
 defaults:
   run:
@@ -34,6 +36,8 @@ jobs:
     steps:
       - name: Check image tag
         run: |
+          echo "GTK_VERSION: ${{ env.GTK_VERSION }}
+          echo "FOO:         ${{ env.FOO }}
           echo "NAME:       ${{ needs.create-test-docker-image.outputs.NAME }}"
           echo "TAG:        ${{ needs.create-test-docker-image.outputs.TAG }}"
 

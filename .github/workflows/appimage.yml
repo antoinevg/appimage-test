@@ -6,6 +6,8 @@ on:
 name: CI
 
 env:
+  IMAGE_NAME: ${{ github.repository }}-gtk-4.14.4
+  IMAGE_TAG:  ${{ github.ref_name }}
   GTK_VERSION: 4.14.4
 
 jobs:
