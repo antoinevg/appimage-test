@@ -91,6 +91,8 @@ jobs:
         shell: bash
         run: |
           echo "We got this: ${{ steps.exists.outputs.dockerimage }}"
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+          echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
 
       - name: Check if check is true
         if: ${{ steps.exists.outputs.dockerimage == 'true'  }}
