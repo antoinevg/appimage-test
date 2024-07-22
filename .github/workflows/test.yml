@@ -100,7 +100,7 @@ jobs:
       - name: Check if check is false
         if: ${{ steps.check.outputs.image == 'false' }}
         run: |
-          echo "IT WAS FALSE
+          echo "IT WAS FALSE"
 
       - uses: dorny/paths-filter@v3
         id: changed
