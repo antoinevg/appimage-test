@@ -21,7 +21,7 @@ jobs:
 
     needs: create-test-docker-image
 
-    name: Build and test
+    name: Run test action
     runs-on: ubuntu-latest
 
     container:
@@ -64,6 +64,37 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Check if docker image exists
+        id: exists
+        shell: bash
+        run: |
+          USER=antoinevg
+          IMAGE=appimage-test-test
+          TAG=main
+          TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
+          declare -a HEADERS=(
+            '-H' "Accept: application/vnd.oci.image.manifest.v1+json"
+            '-H' "Accept: application/vnd.oci.image.index.v1+json"
+            '-H' "Authorization: Bearer $(echo ${TOKEN} | base64)"
+          )
+          RESULT=$(curl "${HEADERS[@]}" https://ghcr.io/v2/${USER}/${IMAGE}/manifests/${TAG})
+          echo ${RESULT} | jq -e 'has("manifests")' >> $GITHUB_OUTPUT
+
+      - name: Check if docker image exists output
+        shell: bash
+        run: |
+          echo "We got this: ${{ steps.exists.outputs.out }}"
+
+      - name: Check if check is true
+        if: ${{ steps.changed.outputs.dockerfile == 'true' }}
+        run: |
+          echo "IT WAS TRUE"
+
+      - name: Check if check is false
+        if: ${{ steps.changed.outputs.dockerfile == 'false' }}
+        run: |
+          echo "IT WAS FALSE
 
       - uses: dorny/paths-filter@v3
         id: changed
