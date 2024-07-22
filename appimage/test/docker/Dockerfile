@@ -11,10 +11,10 @@ RUN useradd -ms /bin/bash runner
 
 # - squish --------------------------------------------------------------------
 
-FROM debian:10
-COPY --from=builder / /
+# FROM debian:10
+# COPY --from=builder / /
 
-# see: https://github.com/actions/checkout/issues/1014
+# See: https://github.com/actions/checkout/issues/1014
 #ENV RUNNER="runner"
 #ENV HOME="/home/$RUNNER"
 ENV RUNNER="root"
