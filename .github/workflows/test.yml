@@ -54,7 +54,7 @@ jobs:
     name: Create Docker image
     runs-on: ubuntu-latest
     outputs:
-      NAME: ${{ github.repository }}-test-${{ env.GTK_VERSION }}
+      NAME: ${{ github.repository }}-test
       TAG:  ${{ github.ref_name }}
 
     steps:
@@ -84,7 +84,7 @@ jobs:
         with:
           context: appimage/test/docker/
           push: true
-          tags: ghcr.io/${{ github.repository }}-test-${{ env.GTK_VERSION }}:${{ github.ref_name }}
+          tags: ghcr.io/${{ github.repository }}-test:${{ github.ref_name }}
           cache-from: type=gha, scope=${{ github.ref_name }}
           cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
 
