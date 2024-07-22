@@ -19,10 +19,12 @@ USER root
 
 # add image dependencies
 RUN apt update && apt upgrade -y && apt install -y \
+    bison \
     build-essential \
     cmake \
     curl \
     desktop-file-utils \
+    flex \
     git \
     libbz2-dev \
     libdrm-dev \
@@ -102,6 +104,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profi
 
 
 # - setup gtk-4 build ---------------------------------------------------------
+
 USER $RUNNER
 WORKDIR $HOME
 
@@ -116,10 +119,6 @@ RUN A=`echo $GTK_VERSION | cut -d. -f1,2` B=$GTK_VERSION && \
 
 # setup gtk-4 build
 WORKDIR $GTK_SOURCE
-
-USER root
-RUN apt install -y flex bison
-USER $RUNNER
 
 RUN meson setup --prefix /opt/gtk-$GTK_VERSION builddir \
         -Dbuildtype=release \
@@ -154,46 +153,6 @@ RUN ninja
 USER root
 WORKDIR $GTK_SOURCE/builddir
 
-RUN ninja install
-
-
-# - build gtk-4 docs ----------------------------------------------------------
-
-USER $RUNNER
-WORKDIR $GTK_SOURCE
-
-# documentation dependencies
-RUN pip install gi-docgen
-
-RUN meson setup --reconfigure  --prefix /opt/gtk-$GTK_VERSION builddir \
-        -Dbuildtype=release \
-        -Dmedia-gstreamer=disabled \
-        -Dprint-cups=disabled \
-        -Dcloudproviders=disabled \
-        -Dcolord=disabled \
-        -Dvulkan=disabled \
-        -Dx11-backend=true \
-        -Dwayland-backend=false \
-        -Dbuild-testsuite=false \
-        -Dbuild-tests=false \
-        -Dbuild-examples=false \
-        -Dbuild-demos=false \
-        -Dintrospection=enabled \
-        -Ddocumentation=true
-
-WORKDIR $GTK_SOURCE/builddir
-RUN ninja reconfigure
-
-USER $RUNNER
-WORKDIR $GTK_SOURCE/builddir
-
-COPY files/build.ninja /home/runner/gtk-4.14.4/builddir/build.ninja
-RUN cp build.ninja foo
-RUN ninja || true
-RUN cp foo build.ninja
-RUN ninja
-
-USER root
 RUN ninja install
 
 
