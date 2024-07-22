@@ -78,7 +78,7 @@ jobs:
             '-H' "Accept: application/vnd.oci.image.index.v1+json"
             '-H' "Authorization: Bearer $(echo ${TOKEN} | base64)"
           )
-          RESULT=$(curl "${HEADERS[@]}" https://ghcr.io/v2/${USER}/${IMAGE}/manifests/${TAG})
+          RESULT=$(curl "${HEADERS[@]}" https://ghcr.io/v2/${IMAGE_NAME}/manifests/${IMAGE_TAG})
           echo 'image<<EOF' >> $GITHUB_OUTPUT
           echo ${RESULT} | jq -e 'has("manifests")' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
@@ -87,18 +87,18 @@ jobs:
         shell: bash
         run: |
           echo "We got this 1: ${{ steps.check.outputs.image }}"
-          echo "IMAGE_NAME: ${{ github.repository }}-test"
-          echo "IMAGE_TAG:  ${{ github.ref_name }}"
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+          echo "IMAGE_TAG:  ${{ env.IMAGE_TAG  }}"
           echo "USER_NAME:  ${{ github.username }}"
           echo "ORG:        ${{ github.organization }}"
 
       - name: Check if check is true
-        if: ${{ steps.changed.outputs.dockerfile == 'true' }}
+        if: ${{ steps.check.outputs.image == 'true' }}
         run: |
           echo "IT WAS TRUE"
 
       - name: Check if check is false
-        if: ${{ steps.changed.outputs.dockerfile == 'false' }}
+        if: ${{ steps.check.outputs.image == 'false' }}
         run: |
           echo "IT WAS FALSE
 
