@@ -86,7 +86,9 @@ jobs:
       - name: Check if docker image exists output
         shell: bash
         run: |
-          echo "We got this: ${{ steps.exists.outputs.out }}"
+          echo "We got this 1: ${{ steps.exists.outputs.var }}"
+          echo "We got this 2: ${{ steps.exists.outputs.out.var }}"
+          echo "We got this 3: ${{ steps.exists.outputs }}"
 
       - name: Check if check is true
         if: ${{ steps.changed.outputs.dockerfile == 'true' }}
