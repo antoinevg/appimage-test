@@ -79,7 +79,9 @@ jobs:
             '-H' "Authorization: Bearer $(echo ${TOKEN} | base64)"
           )
           RESULT=$(curl "${HEADERS[@]}" https://ghcr.io/v2/${USER}/${IMAGE}/manifests/${TAG})
+          echo 'var<<EOF' >> $GITHUB_OUTPUT
           echo ${RESULT} | jq -e 'has("manifests")' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Check if docker image exists output
         shell: bash
