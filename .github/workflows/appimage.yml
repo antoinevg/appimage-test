@@ -67,6 +67,7 @@ jobs:
           name: Linux AppImage binary
           path: |
             packetry-x86_64.AppImage
+            packetry-x86_64.AppDir
           if-no-files-found: error
 
 
@@ -155,8 +156,8 @@ jobs:
           context: appimage/docker/
           push: true
           tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          cache-from: type=gha, scope=${{ github.ref_name }}
-          cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
+          #cache-from: type=gha, scope=${{ github.ref_name }}
+          #cache-to:   type=gha,  scope=${{ github.ref_name }}, mode=max
 
       - name: Generate artifact attestation
         if: ${{ steps.changed.outputs.dockerfile == 'true' || steps.exists.outputs.dockerimage == 'false' }}
