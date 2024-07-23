@@ -32,10 +32,8 @@ jobs:
         password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
 
     steps:
-      - name: Check image tag
+      - name: Check image name & tag
         run: |
-          echo "GTK_VERSION: ${{ env.GTK_VERSION }}
-          echo "FOO:         ${{ env.FOO }}
           echo "NAME:       ${{ needs.create-test-docker-image.outputs.NAME }}"
           echo "TAG:        ${{ needs.create-test-docker-image.outputs.TAG }}"
 
@@ -114,12 +112,12 @@ jobs:
       - name: Check if check is true
         if: ${{ steps.exists.outputs.dockerimage == 'true'  }}
         run: |
-          echo "IT WAS TRUE"
+          echo "Dockerfile has changed"
 
       - name: Check if check is false
         if: ${{ steps.exists.outputs.dockerimage == 'false' }}
         run: |
-          echo "IT WAS FALSE"
+          echo "Dockerfile has not changed"
 
       - name: Log in to the Container registry
         if: ${{ steps.changed.outputs.dockerfile == 'true' || steps.exists.outputs.dockerimage == 'false' }}

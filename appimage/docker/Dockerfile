@@ -169,14 +169,14 @@ RUN rm -rf \
 
 # - squish --------------------------------------------------------------------
 
-# FROM debian:10
-# LABEL stage="squish"
-# COPY --from=builder / /
+FROM debian:10
+LABEL stage="squish"
+COPY --from=builder / /
 
-# ARG GTK_VERSION_DEFAULT
-# ARG NODE_VERSION_DEFAULT
-# ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
-# ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
+ARG GTK_VERSION_DEFAULT
+ARG NODE_VERSION_DEFAULT
+ENV GTK_VERSION="$GTK_VERSION_DEFAULT"
+ENV NODE_VERSION="$NODE_VERSION_DEFAULT"
 
 
 # - setup environment ---------------------------------------------------------
